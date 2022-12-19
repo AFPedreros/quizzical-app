@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 
-type Props = {};
+type Props = {
+    isPlaying: boolean;
+    setIsPlaying: (playing: boolean) => void;
+};
 
-export default function Trivia({}: Props) {
+export default function Trivia({ isPlaying, setIsPlaying }: Props) {
     const [questions, setQuestions] = useState();
 
     const url =
@@ -18,5 +21,15 @@ export default function Trivia({}: Props) {
         fetchData();
     }, []);
 
-    return <div>Trivia</div>;
+    return (
+        <div>
+            <button
+                className=" bg-[#4D5B9E] hover:bg-[#D6DBF5] hover:text-[#4D5B9E]
+ rounded-2xl py-6 px-8 text-white text-3xl"
+                onClick={() => setIsPlaying(!isPlaying)}
+            >
+                Check Answers
+            </button>
+        </div>
+    );
 }

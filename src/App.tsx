@@ -10,7 +10,7 @@ function App() {
             {!isPlaying ? (
                 <Intro isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
             ) : (
-                <Trivia />
+                <Trivia isPlaying={isPlaying} setIsPlaying={setIsPlaying} />
             )}
         </div>
     );

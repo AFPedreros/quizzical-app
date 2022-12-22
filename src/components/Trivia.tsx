@@ -33,16 +33,23 @@ export default function Trivia({ isPlaying, setIsPlaying }: Props) {
         }
         return questionsToRender;
     }
+
     return (
-        <div>
-            {renderQuestions()}
-            <button
-                className=" bg-[#4D5B9E] hover:bg-[#D6DBF5] hover:text-[#4D5B9E]
-                            rounded-2xl py-6 px-8 text-white text-3xl"
-                onClick={() => setIsPlaying(!isPlaying)}
-            >
-                Check Answers
-            </button>
-        </div>
+        <>
+            {questions.length === 0 ? (
+                <div>Loading...</div>
+            ) : (
+                <div className="flex flex-col">
+                    {renderQuestions()}
+                    <button
+                        className=" bg-[#4D5B9E] hover:bg-[#D6DBF5] hover:text-[#4D5B9E]
+                            rounded-2xl m-auto py-2 w-11/12 text-white text-xl"
+                        onClick={() => setIsPlaying(!isPlaying)}
+                    >
+                        Check Answers
+                    </button>
+                </div>
+            )}
+        </>
     );
 }

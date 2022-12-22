@@ -6,12 +6,12 @@ type Props = {
 export default function Intro({ isPlaying, setIsPlaying }: Props) {
     return (
         <div>
-            <div className=" flex flex-col justify-center items-center gap-12">
+            <div className=" border-black flex flex-col justify-center items-center gap-12">
                 <h1 className="text-8xl font-semibold">Quizzical</h1>
-                <p className=" text-3xl text-normal">Description to add</p>
+                <p className=" text-3xl text-normal">Sports Trivia</p>
                 <button
                     className=" bg-[#4D5B9E] hover:bg-[#D6DBF5] hover:text-[#4D5B9E]
-                                rounded-2xl py-6 px-8 text-white text-3xl"
+                                rounded-2xl py-2 w-11/12 text-white text-xl"
                     onClick={() => setIsPlaying(!isPlaying)}
                 >
                     Start Quiz!

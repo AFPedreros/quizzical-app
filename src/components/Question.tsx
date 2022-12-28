@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Answer from "./Answer";
 
 type Props = {
     questionInfo: QuestionInfo;
@@ -15,16 +16,27 @@ export default function Question({ questionInfo }: Props) {
     const [correctAnswer, setCorrectAnswer] = useState("");
     const [wrongAnswer, setWrongAnswer] = useState([""]);
 
-    const renderWrongAnswers = wrongAnswer.map((answer, index) => {
-        return (
-            <div
-                key={index}
-                className=" mr-4 px-4 border-solid border-2 border-black rounded-lg"
-            >
-                {answer}
-            </div>
+    const answers = renderAnswers();
+
+    function renderAnswers() {
+        const shuffledAnswers = [correctAnswer, ...wrongAnswer].sort(
+            () => Math.random() - 0.5
         );
-    });
+
+        const answerComponents = shuffledAnswers.map((answer, index) => {
+            return (
+                <Answer
+                    key={index}
+                    answerInfo={answer}
+                    isCorrect={answer === correctAnswer}
+                />
+            );
+        });
+
+        return (
+            <div className="flex my-2 justify-start">{answerComponents}</div>
+        );
+    }
 
     useEffect(() => {
         setQuestion(questionInfo.question);
@@ -32,17 +44,12 @@ export default function Question({ questionInfo }: Props) {
         setWrongAnswer(questionInfo.incorrect_answers);
     }, []);
 
-    console.log(wrongAnswer);
+    console.log(correctAnswer);
 
     return (
-        <div className=" my-4 py-2 border-b-2 border-slate-300 border-solid">
+        <div className=" my-4 py-2 border-b-2 border-[#DBDEF0] border-solid font-[#293264]">
             <div>{question}</div>
-            <div className=" flex my-2 justify-start ">
-                <div className=" mr-4 px-4 border-solid border-2 border-black rounded-lg">
-                    {correctAnswer}
-                </div>
-                {renderWrongAnswers}
-            </div>
+            {answers}
         </div>
     );
 }

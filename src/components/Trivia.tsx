@@ -10,7 +10,7 @@ export default function Trivia({ isPlaying, setIsPlaying }: Props) {
     const [questions, setQuestions] = useState([]);
 
     const url =
-        "https://opentdb.com/api.php?amount=5&category=21&difficulty=medium";
+        "https://opentdb.com/api.php?amount=5&category=21&encode=base64";
 
     useEffect(() => {
         async function fetchData() {

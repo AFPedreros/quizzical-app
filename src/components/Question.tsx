@@ -44,11 +44,9 @@ export default function Question({ questionInfo }: Props) {
         setWrongAnswer(questionInfo.incorrect_answers);
     }, []);
 
-    console.log(correctAnswer);
-
     return (
         <div className=" my-4 py-2 border-b-2 border-[#DBDEF0] border-solid font-[#293264]">
-            <div>{question}</div>
+            <div>{atob(question)}</div>
             {answers}
         </div>
     );

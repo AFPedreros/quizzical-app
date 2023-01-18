@@ -6,8 +6,15 @@ type Props = {
     setIsPlaying: (playing: boolean) => void;
 };
 
+interface QuestionInfo {
+    question: string;
+    incorrect_answers: [];
+    correct_answer: string;
+}
+
 export default function Trivia({ isPlaying, setIsPlaying }: Props) {
     const [questions, setQuestions] = useState([]);
+    const [score, setScore] = useState(0);
 
     const url =
         "https://opentdb.com/api.php?amount=5&category=21&encode=base64";
@@ -20,30 +27,24 @@ export default function Trivia({ isPlaying, setIsPlaying }: Props) {
         }
         fetchData();
     }, []);
-
-    function renderQuestions() {
-        let questionsToRender: React.ReactElement<typeof Question>[] = [];
-
-        if (questions.length > 0) {
-            questions.map((question, index) => {
-                questionsToRender.push(
-                    <Question key={index} questionInfo={question} />
-                );
-            });
-        }
-        return questionsToRender;
-    }
-
     return (
         <>
-            {questions.length === 0 ? (
+            {!questions ? (
                 <div>Loading...</div>
             ) : (
-                <div className="flex flex-col">
-                    {renderQuestions()}
+                <div className="flex flex-col w-full px-16">
+                    {questions.map((info: QuestionInfo, index) => {
+                        return (
+                            <Question
+                                key={index}
+                                question={info.question}
+                                correctAnswer={info.correct_answer}
+                                incorrectAnswers={info.incorrect_answers}
+                            />
+                        );
+                    })}
                     <button
-                        className=" bg-[#4D5B9E] hover:bg-[#D6DBF5] hover:text-[#4D5B9E]
-                            rounded-2xl m-auto py-2 w-11/12 text-white text-xl"
+                        className="bg-[#4D5B9E] hover:bg-[#D6DBF5] w-fit hover:text-[#4D5B9E] rounded-2xl py-4 px-10 text-white text-xl"
                         onClick={() => setIsPlaying(!isPlaying)}
                     >
                         Check Answers

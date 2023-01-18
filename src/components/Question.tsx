@@ -2,52 +2,82 @@ import { useState, useEffect } from "react";
 import Answer from "./Answer";
 
 type Props = {
-    questionInfo: QuestionInfo;
+    question: string;
+    correctAnswer: string;
+    incorrectAnswers: string[];
 };
 
-interface QuestionInfo {
-    question: string;
-    correct_answer: string;
-    incorrect_answers: string[];
-}
+type TAnswer = {
+    id: number;
+    answer: string;
+    isHeld: boolean;
+};
 
-export default function Question({ questionInfo }: Props) {
-    const [question, setQuestion] = useState("");
-    const [correctAnswer, setCorrectAnswer] = useState("");
-    const [wrongAnswer, setWrongAnswer] = useState([""]);
+export default function Question({
+    question,
+    correctAnswer,
+    incorrectAnswers,
+}: Props) {
+    const [answers, setAnswers] = useState<TAnswer[]>();
 
-    const answers = renderAnswers();
-
-    function renderAnswers() {
-        const shuffledAnswers = [correctAnswer, ...wrongAnswer].sort(
-            () => Math.random() - 0.5
+    useEffect(() => {
+        console.log(atob(correctAnswer));
+        const allAnswers = incorrectAnswers;
+        allAnswers.push(correctAnswer);
+        const shuffleArray = shuffle(allAnswers);
+        setAnswers(
+            shuffleArray.map((answer, index) => {
+                return {
+                    id: index,
+                    answer: answer,
+                    isHeld: false,
+                };
+            })
         );
+    }, []);
 
-        const answerComponents = shuffledAnswers.map((answer, index) => {
-            return (
-                <Answer
-                    key={index}
-                    answerInfo={answer}
-                    isCorrect={answer === correctAnswer}
-                />
+    function shuffle(array: string[]) {
+        const newArray = [...array];
+        const length = newArray.length;
+
+        for (let start = 0; start < length; start++) {
+            const randomPosition = Math.floor(
+                (newArray.length - start) * Math.random()
             );
-        });
+            const randomItem = newArray.splice(randomPosition, 1);
 
-        return (
-            <div className="flex my-2 justify-start">{answerComponents}</div>
+            newArray.push(...randomItem);
+        }
+
+        return newArray;
+    }
+
+    function holdAnswer(id: number) {
+        setAnswers((prevAnswers) =>
+            prevAnswers?.map((a) => {
+                return a.id !== id
+                    ? { ...a, isHeld: false }
+                    : { ...a, isHeld: !a.isHeld };
+            })
         );
     }
 
-    useEffect(() => {
-        setQuestion(questionInfo.question);
-        setCorrectAnswer(questionInfo.correct_answer);
-        setWrongAnswer(questionInfo.incorrect_answers);
-    }, []);
+    const questionElements = answers?.map((info, index) => {
+        return (
+            <Answer
+                key={index}
+                answerInfo={info.answer}
+                isCorrect={info.answer === correctAnswer}
+                isHeld={info.isHeld}
+                holdAnswer={() => holdAnswer(info.id)}
+            />
+        );
+    });
 
     return (
         <div className=" my-4 py-2 border-b-2 border-[#DBDEF0] border-solid font-[#293264]">
-            <div>{atob(question)}</div>
-            {answers}
+            <h2>{atob(question)}</h2>
+            <div className="flex">{questionElements}</div>
         </div>
     );
 }

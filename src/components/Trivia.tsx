@@ -1,9 +1,12 @@
+import { Button } from "flowbite-react";
 import { useState, useEffect } from "react";
 import Question from "./Question";
 
 type Props = {
     isPlaying: boolean;
     setIsPlaying: (playing: boolean) => void;
+    difficulty: string;
+    category: string;
 };
 
 interface QuestionInfo {
@@ -12,12 +15,17 @@ interface QuestionInfo {
     correct_answer: string;
 }
 
-export default function Trivia({ isPlaying, setIsPlaying }: Props) {
+export default function Trivia({
+    isPlaying,
+    setIsPlaying,
+    category,
+    difficulty,
+}: Props) {
     const [questions, setQuestions] = useState([]);
+    const [checkAnswers, setCheckAnswers] = useState(false);
     const [score, setScore] = useState(0);
 
-    const url =
-        "https://opentdb.com/api.php?amount=5&category=21&encode=base64";
+    const url = `https://opentdb.com/api.php?amount=5&category=${category}&difficulty=${difficulty}&encode=base64`;
 
     useEffect(() => {
         async function fetchData() {
@@ -27,12 +35,22 @@ export default function Trivia({ isPlaying, setIsPlaying }: Props) {
         }
         fetchData();
     }, []);
+
+    function handleClick() {
+        setCheckAnswers((prev) => !prev);
+        console.log(score);
+    }
+
+    function endGame() {
+        setIsPlaying(!isPlaying);
+    }
+    console.log(score);
     return (
         <>
             {!questions ? (
                 <div>Loading...</div>
             ) : (
-                <div className="flex flex-col w-full px-16">
+                <div className="w-fill flex flex-col px-16">
                     {questions.map((info: QuestionInfo, index) => {
                         return (
                             <Question
@@ -40,15 +58,32 @@ export default function Trivia({ isPlaying, setIsPlaying }: Props) {
                                 question={info.question}
                                 correctAnswer={info.correct_answer}
                                 incorrectAnswers={info.incorrect_answers}
+                                checkAnswers={checkAnswers}
+                                setScore={setScore}
                             />
                         );
                     })}
-                    <button
-                        className="bg-[#4D5B9E] hover:bg-[#D6DBF5] w-fit hover:text-[#4D5B9E] rounded-2xl py-4 px-10 text-white text-xl"
-                        onClick={() => setIsPlaying(!isPlaying)}
-                    >
-                        Check Answers
-                    </button>
+                    {!checkAnswers ? (
+                        <Button
+                            className="w-fit font-bold"
+                            onClick={handleClick}
+                        >
+                            Check Answers
+                        </Button>
+                    ) : (
+                        <div className="m-0 flex h-full p-0">
+                            <p className="text-normal my-auto mr-4 text-xl">
+                                {`You scored ${score}/5 correct answers`}
+                            </p>
+
+                            <Button
+                                className="w-fit font-bold"
+                                onClick={endGame}
+                            >
+                                Play Again
+                            </Button>
+                        </div>
+                    )}
                 </div>
             )}
         </>

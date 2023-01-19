@@ -1,20 +1,108 @@
+import { Dropdown, Button } from "flowbite-react";
+
 type Props = {
     isPlaying: boolean;
     setIsPlaying: (playing: boolean) => void;
+    difficulty: string;
+    setCategory: (difficulty: string) => void;
+    category: string;
+    setDifficulty: (category: string) => void;
 };
 
-export default function Intro({ isPlaying, setIsPlaying }: Props) {
+export default function Intro({
+    isPlaying,
+    setIsPlaying,
+    category,
+    setCategory,
+    difficulty,
+    setDifficulty,
+}: Props) {
+    function handleClick() {
+        setIsPlaying(!isPlaying);
+    }
+
     return (
         <div>
-            <div className=" border-black flex flex-col justify-center items-center gap-12">
-                <h1 className="text-8xl font-semibold">Quizzical</h1>
-                <p className=" text-3xl text-normal">Sports Trivia</p>
-                <button
-                    className=" bg-[#4D5B9E] hover:bg-[#D6DBF5] hover:text-[#4D5B9E] rounded-2xl py-4 px-10 text-white text-xl"
-                    onClick={() => setIsPlaying(!isPlaying)}
+            <div className=" flex flex-col items-center justify-center border-black">
+                <h1 className="text-6xl font-semibold">Quizzical</h1>
+                <p className=" text-normal mb-8 text-xl">
+                    Your favorite trivia game
+                </p>
+                <Button
+                    className="mb-8 font-bold"
+                    onClick={() => handleClick()}
                 >
                     Start Quiz!
-                </button>
+                </Button>
+                <div className="flex gap-4">
+                    <Dropdown label="Select Category:">
+                        <Dropdown.Item
+                            onClick={() => {
+                                setCategory("9");
+                            }}
+                        >
+                            General Knowledge
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                            onClick={() => {
+                                setCategory("17");
+                            }}
+                        >
+                            Science & Nature
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                            onClick={() => {
+                                setCategory("27");
+                            }}
+                        >
+                            Animals
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                            onClick={() => {
+                                setCategory("26");
+                            }}
+                        >
+                            Celebrities
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                            onClick={() => {
+                                setCategory("21");
+                            }}
+                        >
+                            Sports
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                            onClick={() => {
+                                setCategory("25");
+                            }}
+                        >
+                            Art
+                        </Dropdown.Item>
+                    </Dropdown>
+                    <Dropdown label="Select Difficulty:">
+                        <Dropdown.Item
+                            onClick={() => {
+                                setDifficulty("easy");
+                            }}
+                        >
+                            Easy
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                            onClick={() => {
+                                setDifficulty("medium");
+                            }}
+                        >
+                            Medium
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                            onClick={() => {
+                                setDifficulty("hard");
+                            }}
+                        >
+                            Hard
+                        </Dropdown.Item>
+                    </Dropdown>
+                </div>
             </div>
         </div>
     );

@@ -5,18 +5,23 @@ type Props = {
     question: string;
     correctAnswer: string;
     incorrectAnswers: string[];
+    checkAnswers: boolean;
+    setScore: React.Dispatch<React.SetStateAction<number>>;
 };
 
 type TAnswer = {
     id: number;
     answer: string;
     isHeld: boolean;
+    isCorrect: boolean;
 };
 
 export default function Question({
     question,
     correctAnswer,
     incorrectAnswers,
+    checkAnswers,
+    setScore,
 }: Props) {
     const [answers, setAnswers] = useState<TAnswer[]>();
 
@@ -31,6 +36,7 @@ export default function Question({
                     id: index,
                     answer: answer,
                     isHeld: false,
+                    isCorrect: answer === correctAnswer,
                 };
             })
         );
@@ -70,12 +76,14 @@ export default function Question({
                 isCorrect={info.answer === correctAnswer}
                 isHeld={info.isHeld}
                 holdAnswer={() => holdAnswer(info.id)}
+                checkAnswers={checkAnswers}
+                setScore={setScore}
             />
         );
     });
 
     return (
-        <div className=" my-4 py-2 border-b-2 border-[#DBDEF0] border-solid font-[#293264]">
+        <div className=" my-4 border-b-2 border-solid border-[#DBDEF0] py-2 font-[#293264]">
             <h2>{atob(question)}</h2>
             <div className="flex">{questionElements}</div>
         </div>
